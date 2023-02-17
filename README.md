@@ -1,4 +1,4 @@
-# Gutefind Android Application
+# GuteFind Android Application
 
-Gutefind Proof of Concept Android application  
+GuteFind Proof of Concept Android application  
 The application is based on the 
