@@ -1,4 +1,4 @@
-package com.gutefind.mobile.ui;
+package com.gutefind.mobile.ui.products;
 
 import android.graphics.Bitmap;
 

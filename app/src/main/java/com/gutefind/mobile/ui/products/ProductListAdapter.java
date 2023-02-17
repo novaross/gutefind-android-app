@@ -1,4 +1,4 @@
-package com.gutefind.mobile.ui;
+package com.gutefind.mobile.ui.products;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,10 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gutefind.mobile.R;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.ViewHolder> {
 
+    Logger log = LoggerFactory.getLogger(ProductListAdapter.class);
     private List<Product> productList;
     private Fragment parentFragment;
 

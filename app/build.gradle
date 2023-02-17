@@ -33,7 +33,7 @@ android {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
@@ -49,4 +49,9 @@ dependencies {
     // this dependency is used by the original application
     // https://github.com/dariuszseweryn/RxAndroidBle
     implementation "com.polidea.rxandroidble3:rxandroidble:1.17.2"
+
+    // logging
+    implementation 'org.slf4j:slf4j-api:1.7.36' // slf4j 2.x not yet supported
+    implementation 'com.github.tony19:logback-android:2.0.1'
+
 }
