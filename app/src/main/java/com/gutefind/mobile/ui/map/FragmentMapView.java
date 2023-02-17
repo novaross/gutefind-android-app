@@ -1,5 +1,6 @@
 package com.gutefind.mobile.ui.map;
 
+import android.graphics.PointF;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -53,14 +54,7 @@ public class FragmentMapView extends Fragment implements FragmentMapViewInt {
         super.onResume();
         //mapPresenter.setSomeText();
         log.debug("starting delayed action");
-        final Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                log.debug("running delayed action");
-                mapPresenter.setSomeText();
-            }
-        }, 1000);
+        mapPresenter.setSomeText();
     }
 
     @Override
@@ -72,5 +66,10 @@ public class FragmentMapView extends Fragment implements FragmentMapViewInt {
     @Override
     public void setText(String text) {
         binding.testView.setText(text);
+    }
+
+    @Override
+    public void drawDevice(PointF deviceCenter) {
+
     }
 }

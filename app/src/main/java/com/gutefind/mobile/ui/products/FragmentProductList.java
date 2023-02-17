@@ -33,7 +33,6 @@ public class FragmentProductList extends Fragment {
         productListView.setAdapter(productListAdapter);
         productListView.setLayoutManager(new LinearLayoutManager(container.getContext()));
         return binding.getRoot();
-
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -44,6 +43,7 @@ public class FragmentProductList extends Fragment {
         List<Product> productList = new ArrayList<>();
         productList.add(new Product(1, "First Product", null));
         productList.add(new Product(2, "Second Product", null));
+        productList.add(new Product(3, "Third Product", null));
         return productList;
     }
 
