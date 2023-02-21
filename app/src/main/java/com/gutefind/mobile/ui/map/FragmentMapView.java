@@ -21,7 +21,9 @@ import org.slf4j.LoggerFactory;
 
 public class FragmentMapView extends Fragment implements FragmentMapViewInt {
 
-    Logger log = LoggerFactory.getLogger(FragmentMapView.class);
+    private Logger log = LoggerFactory.getLogger(FragmentMapView.class);
+    private CanvasView canvasView;
+
 
     private FragmentMapViewBinding binding;
     private MapPresenter mapPresenter;
@@ -35,18 +37,13 @@ public class FragmentMapView extends Fragment implements FragmentMapViewInt {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMapViewBinding.inflate(inflater, container, false);
+        canvasView = binding.canvasView;
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FragmentMapView.this)
-                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
-            }
-        });
+
     }
 
     @Override
@@ -55,6 +52,7 @@ public class FragmentMapView extends Fragment implements FragmentMapViewInt {
         //mapPresenter.setSomeText();
         log.debug("starting delayed action");
         mapPresenter.setSomeText();
+//        canvasView.
     }
 
     @Override
@@ -65,7 +63,7 @@ public class FragmentMapView extends Fragment implements FragmentMapViewInt {
 
     @Override
     public void setText(String text) {
-        binding.testView.setText(text);
+        // binding.testView.setText(text);
     }
 
     @Override

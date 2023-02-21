@@ -20,7 +20,7 @@ import java.util.List;
 
 public class FragmentProductList extends Fragment {
 
-    Logger log = LoggerFactory.getLogger(FragmentProductList.class);
+    private Logger log = LoggerFactory.getLogger(FragmentProductList.class);
 
     private FragmentProductListBinding binding;
 
