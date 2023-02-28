@@ -1,5 +1,6 @@
 package com.gutefind.mobile.ui.map;
 
+import com.gutefind.mobile.location.BluetoothClient;
 import com.gutefind.mobile.ui.MainActivity;
 import com.nexenio.bleindoorpositioning.IndoorPositioning;
 import com.nexenio.bleindoorpositioning.ble.advertising.IndoorPositioningAdvertisingPacket;
@@ -15,30 +16,36 @@ import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
-public class MapModel {
+public class MapModel implements BluetoothClient.BluetoothClientCallback {
 
-    Logger log = LoggerFactory.getLogger(MapModel.class);
+    public interface MapModelCallback {
+        void onLocationChanged(Location location);
+    }
+
+    private Logger log = LoggerFactory.getLogger(MapModel.class);
 
     protected BeaconManager beaconManager = BeaconManager.getInstance();
     protected BeaconUpdateListener beaconUpdateListener;
-    protected IBeaconFilter uuidFilter = new IBeaconFilter(UUID.fromString("12345678-abcd-abcd-abcd-12345678abcd"));
+    private MapModelCallback mapModelCallback;
     protected LocationListener deviceLocationListener;
 
-    public MapModel() {
+    public MapModel(MapModelCallback mapModelCallback) {
         log.debug("MapModel created");
+        this.mapModelCallback = mapModelCallback;
         initialize();
     }
 
     public void initialize() {
         log.debug("MapModel created");
-        IndoorPositioning.getInstance().setIndoorPositioningBeaconFilter(uuidFilter);
-        // IndoorPositioning.registerLocationListener(deviceLocationListener);
-        IndoorPositioning.registerLocationListener(new LocationListener() {
-            @Override
-            public void onLocationUpdated(LocationProvider locationProvider, Location location) {
-                log.debug("onLocationUpdated: lat: {}, lng: {}", location.getLatitude(), location.getLongitude());
-            }
-        });
+        BluetoothClient.setBluetoothClientCallback(this);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        log.debug("onLocationUpdated in the callback: lat: {}, lng: {}", location.getLatitude(), location.getLongitude());
+        if (null != mapModelCallback) {
+            mapModelCallback.onLocationChanged(location);
+        }
     }
 
 //    public void shutDown() {

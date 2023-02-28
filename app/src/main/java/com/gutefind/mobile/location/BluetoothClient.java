@@ -13,6 +13,7 @@ import com.nexenio.bleindoorpositioning.ble.beacon.Beacon;
 import com.nexenio.bleindoorpositioning.ble.beacon.BeaconManager;
 import com.nexenio.bleindoorpositioning.ble.beacon.BeaconUpdateListener;
 import com.nexenio.bleindoorpositioning.ble.beacon.IBeacon;
+import com.nexenio.bleindoorpositioning.ble.beacon.filter.IBeaconFilter;
 import com.nexenio.bleindoorpositioning.location.Location;
 import com.nexenio.bleindoorpositioning.location.LocationListener;
 import com.nexenio.bleindoorpositioning.location.provider.LocationProvider;
@@ -24,23 +25,31 @@ import com.polidea.rxandroidble.scan.ScanSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.UUID;
+
 import rx.Observer;
 import rx.Subscription;
 
 public class BluetoothClient {
 
+    public interface BluetoothClientCallback {
+
+        void onLocationChanged(Location location);
+
+    }
+
     private static Logger log = LoggerFactory.getLogger(BluetoothClient.class);
+    private static IBeaconFilter uuidFilter = new IBeaconFilter(UUID.fromString("12345678-abcd-abcd-abcd-12345678abcd"));
 
     private static volatile BluetoothClient INSTANCE;
     private BluetoothManager bluetoothManager;
     private BluetoothAdapter bluetoothAdapter;
     private RxBleClient rxBleClient;
-
     private Subscription scanningSubscription;
+    private static BluetoothClientCallback bluetoothClientCallback;
 
     private BluetoothClient() {
     }
-
 
     public static BluetoothClient getInstance() {
         if (INSTANCE == null) {
@@ -86,12 +95,18 @@ public class BluetoothClient {
             }
         });
 
-        // test the beacon update listener
-        // testBeaconUpdateListener();
-
-        testListenForPositioning();
+        // initialize the indoor positioning singleton
+        IndoorPositioning.getInstance().setIndoorPositioningBeaconFilter(uuidFilter);
+        IndoorPositioning.registerLocationListener(new LocationListener() {
+            @Override
+            public void onLocationUpdated(LocationProvider locationProvider, Location location) {
+                // log.debug("onLocationUpdated: lat: {}, lng: {}", location.getLatitude(), location.getLongitude());
+                if (null != bluetoothClientCallback) {
+                    bluetoothClientCallback.onLocationChanged(location);
+                }
+            }
+        });
     }
-
 
     public static void stopScanning() {
         if (!isScanning()) {
@@ -139,22 +154,8 @@ public class BluetoothClient {
         });
     }
 
-
-    /**
-     * This method prints the location of the device based on the beacon readings.
-     * The Location will contain latitude, longitude and altitude, as well as some convenience methods to get the distance or angle to a different location.
-     * Log sample:
-     *
-     *
-     *
-     */
-    private static void testListenForPositioning() {
-        IndoorPositioning.registerLocationListener(new LocationListener() {
-            @Override
-            public void onLocationUpdated(LocationProvider locationProvider, Location location) {
-                log.debug("onLocationUpdated: lat: {}, lng: {}", location.getLatitude(), location.getLongitude());
-            }
-        });
+    public static void setBluetoothClientCallback(BluetoothClientCallback bluetoothClientCallback) {
+        BluetoothClient.bluetoothClientCallback = bluetoothClientCallback;
     }
 
     public static boolean isScanning() {

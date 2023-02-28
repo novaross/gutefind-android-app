@@ -15,6 +15,8 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.gutefind.mobile.R;
 import com.gutefind.mobile.databinding.FragmentMapViewBinding;
+import com.nexenio.bleindoorpositioning.location.Location;
+import com.nexenio.bleindoorpositioning.location.projection.CanvasProjection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,10 +30,13 @@ public class FragmentMapView extends Fragment implements FragmentMapViewInt {
     private FragmentMapViewBinding binding;
     private MapPresenter mapPresenter;
 
+    protected CanvasProjection canvasProjection;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mapPresenter = new MapPresenter(this, getContext());
+        canvasProjection = new CanvasProjection();
     }
 
     @Override
@@ -67,7 +72,8 @@ public class FragmentMapView extends Fragment implements FragmentMapViewInt {
     }
 
     @Override
-    public void drawDevice(PointF deviceCenter) {
-
+    public void drawDevice(Location location) {
+        canvasView.setDeviceLocation(location);
+        canvasView.invalidate();
     }
 }
