@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.gutefind.mobile.R;
+import com.gutefind.mobile.util.Constants;
 import com.gutefind.mobile.util.DisplayUtil;
 import com.nexenio.bleindoorpositioning.location.Location;
 import com.nexenio.bleindoorpositioning.location.projection.CanvasProjection;
@@ -87,6 +88,8 @@ public class CanvasView extends View {
         this.canvasCenter = new PointF(width / 2f, height / 2f);
         canvasProjection.setCanvasWidth(width);
         canvasProjection.setCanvasHeight(height);
+        updateEdgeLocations();
+        log.debug("canvas width: {}, canvas height {}", canvasWidth, canvasHeight);
     }
 
     @Override
@@ -105,10 +108,25 @@ public class CanvasView extends View {
         }
         PointF deviceCenter = getPointFromLocation(deviceLocation);
         log.debug("drawDevice, deviceCenter: x:{}, y:{}", deviceCenter.x, deviceCenter.y);
-
         canvas.drawCircle(deviceCenter.x, deviceCenter.y, 10, whiteFillPaint);
-
         canvas.drawCircle(canvasCenter.x, canvasCenter.y, 10, whiteFillPaint);
+    }
+
+    private void updateEdgeLocations() {
+        // this is actually the location of the top left beacon
+        Location topLeftLocation = new Location();
+        topLeftLocation.setLatitude(Constants.BEACON_TOP_LEFT_LAT);
+        topLeftLocation.setLongitude(Constants.BEACON_TOP_LEFT_LNG);
+
+        // this is actually the location of the bottom right beacon
+        Location bottomRightLocation = new Location();
+        bottomRightLocation.setLatitude(Constants.BEACON_BOTTOM_RIGHT_LAT);
+        bottomRightLocation.setLongitude(Constants.BEACON_BOTTOM_RIGHT_LNG);
+
+        canvasProjection.setTopLeftLocation(topLeftLocation);
+        canvasProjection.setBottomRightLocation(bottomRightLocation);
+        log.debug("updated edge locations, invalidating");
+        invalidate();
     }
 
     public void setDeviceLocation(Location location) {

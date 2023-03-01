@@ -1,5 +1,6 @@
 package com.gutefind.mobile.location;
 
+import com.gutefind.mobile.util.Constants;
 import com.nexenio.bleindoorpositioning.ble.beacon.IBeacon;
 import com.nexenio.bleindoorpositioning.location.Location;
 import com.nexenio.bleindoorpositioning.location.provider.IBeaconLocationProvider;
@@ -19,20 +20,20 @@ public class BeaconLocationProvider {
         log.debug("beacon minor is: {}", iBeacon.getMinor());
         switch (iBeacon.getMinor()) {
             case 1: {
-                beaconLocation.setLatitude(32.083400);
-                beaconLocation.setLongitude(34.773763);
+                beaconLocation.setLatitude(Constants.BEACON_TOP_LEFT_LAT);
+                beaconLocation.setLongitude(Constants.BEACON_TOP_LEFT_LNG);
                 beaconLocation.setAltitude(36);
                 break;
             }
             case 2: {
-                beaconLocation.setLatitude(32.083386);
-                beaconLocation.setLongitude(34.773868);
+                beaconLocation.setLatitude(Constants.BEACON_TOP_RIGHT_LAT);
+                beaconLocation.setLongitude(Constants.BEACON_TOP_RIGHT_LNG);
                 beaconLocation.setAltitude(36);
                 break;
             }
             case 3: {
-                beaconLocation.setLatitude(32.083349);
-                beaconLocation.setLongitude(34.773856);
+                beaconLocation.setLatitude(Constants.BEACON_BOTTOM_RIGHT_LAT);
+                beaconLocation.setLongitude(Constants.BEACON_BOTTOM_RIGHT_LNG);
                 beaconLocation.setAltitude(36);
                 break;
             }

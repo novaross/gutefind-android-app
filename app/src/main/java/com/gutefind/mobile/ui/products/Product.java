@@ -1,17 +1,15 @@
 package com.gutefind.mobile.ui.products;
 
-import android.graphics.Bitmap;
-
 public class Product {
 
     public Integer id;
     public String name;
-    public Bitmap image;
+    public Integer drawableId;
 
-    public Product(Integer id, String name, Bitmap image) {
+    public Product(Integer id, String name, Integer drawableId) {
         this.id = id;
         this.name = name;
-        this.image = image;
+        this.drawableId = drawableId;
     }
 
     public Integer getId() {
@@ -30,11 +28,11 @@ public class Product {
         this.name = name;
     }
 
-    public Bitmap getImage() {
-        return image;
+    public Integer getDrawableId() {
+        return drawableId;
     }
 
-    public void setImage(Bitmap image) {
-        this.image = image;
+    public void setDrawableId(Integer drawableId) {
+        this.drawableId = drawableId;
     }
 }

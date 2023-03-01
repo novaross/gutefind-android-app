@@ -1,5 +1,8 @@
 plugins {
     id 'com.android.application'
+    // below plugin is required to generate classes for passing data between the arguments
+    // https://developer.android.com/guide/navigation/navigation-pass-data
+    id 'androidx.navigation.safeargs'
 }
 
 android {

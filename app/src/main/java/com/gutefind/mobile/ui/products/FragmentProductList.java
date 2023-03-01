@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gutefind.mobile.R;
 import com.gutefind.mobile.databinding.FragmentProductListBinding;
 
 import org.slf4j.Logger;
@@ -41,9 +42,10 @@ public class FragmentProductList extends Fragment {
 
     private List<Product> createProductList() {
         List<Product> productList = new ArrayList<>();
-        productList.add(new Product(1, "First Product", null));
-        productList.add(new Product(2, "Second Product", null));
-        productList.add(new Product(3, "Third Product", null));
+        productList.add(new Product(1, "מסטיקים", R.drawable.item_gums));
+        productList.add(new Product(2, "תה", R.drawable.item_tea));
+        productList.add(new Product(3, "גפרורים", R.drawable.item_matches));
+        productList.add(new Product(4, "קיסמים", R.drawable.item_toothpics));
         return productList;
     }
 
