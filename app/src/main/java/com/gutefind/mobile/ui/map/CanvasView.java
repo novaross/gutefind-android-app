@@ -1,21 +1,17 @@
 package com.gutefind.mobile.ui.map;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 
-import com.gutefind.mobile.R;
 import com.gutefind.mobile.ui.products.Product;
 import com.gutefind.mobile.util.Constants;
 import com.gutefind.mobile.util.DisplayUtil;
@@ -33,17 +29,15 @@ public class CanvasView extends View {
 
     private Logger log = LoggerFactory.getLogger(CanvasView.class);
 
-    private Paint textPaint;
     private Paint backgroundPaint;
-    private Paint deviceRangePaint;
-    private Paint whiteFillPaint;
+    private Paint deviceDotPaint;
     private int canvasWidth;
     private int canvasHeight;
     private PointF canvasCenter;
+
     private float pixelsPerDip = DisplayUtil.convertDipToPixels(1);
     private CanvasProjection canvasProjection;
     private Location deviceLocation;
-
 
     private Product product;
 
@@ -66,25 +60,18 @@ public class CanvasView extends View {
 
     private void initialize() {
         log.debug("initialize canvas");
-        // initialize text properties
-        textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        textPaint.setColor(Color.BLACK);
-        textPaint.setTextSize(pixelsPerDip * 8);
 
         // initialize the background
         backgroundPaint = new Paint();
         backgroundPaint.setColor(Color.WHITE);
         backgroundPaint.setStyle(Paint.Style.FILL);
+
+        // device location paint
+        deviceDotPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        deviceDotPaint.setStyle(Paint.Style.FILL);
+        deviceDotPaint.setColor(Color.GREEN);
+
         canvasProjection = new CanvasProjection();
-
-        deviceRangePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        backgroundPaint.setColor(Color.RED);
-        deviceRangePaint.setStyle(Paint.Style.FILL);
-        deviceRangePaint.setAlpha(25);
-
-        whiteFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        whiteFillPaint.setStyle(Paint.Style.FILL);
-        whiteFillPaint.setColor(Color.WHITE);
     }
 
     @Override
@@ -103,22 +90,33 @@ public class CanvasView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        // this is triggered each time invalidate is called
         log.debug("onDraw");
         drawBackground(canvas);
-        // when is this triggered?
-        drawDevice(canvas);
         drawProduct(canvas);
+        drawDevice(canvas);
     }
 
     private void drawDevice(Canvas canvas) {
-        // this is the device location, need to pass it somehow to the class
         if (null == deviceLocation) {
             return;
         }
         PointF deviceCenter = getPointFromLocation(deviceLocation);
         log.debug("drawDevice, deviceCenter: x:{}, y:{}", deviceCenter.x, deviceCenter.y);
-        canvas.drawCircle(deviceCenter.x, deviceCenter.y, 10, whiteFillPaint);
-        canvas.drawCircle(canvasCenter.x, canvasCenter.y, 10, whiteFillPaint);
+        if (deviceCenter.x > canvasWidth) {
+            deviceCenter.x = canvasWidth;
+        }
+        if (deviceCenter.x < 0) {
+            deviceCenter.x = 0;
+        }
+        if (deviceCenter.y > canvasHeight) {
+            deviceCenter.y = canvasHeight;
+        }
+        if (deviceCenter.y < 0) {
+            deviceCenter.y = 0;
+        }
+
+        canvas.drawCircle(deviceCenter.x, deviceCenter.y, 50, deviceDotPaint);
     }
 
     private void updateEdgeLocations() {
@@ -143,8 +141,13 @@ public class CanvasView extends View {
     }
 
     private void drawProduct(Canvas canvas) {
+        if (null == product) {
+            return;
+        }
+        Rect rect = getProductLocationBasedOnProduct(product.getId());
         Drawable drawable = getResources().getDrawable(product.getDrawableId(), null);
-        drawable.setBounds(0, 0, Math.round(DisplayUtil.convertDipToPixels(100)), Math.round(DisplayUtil.convertDipToPixels(100)));
+        //drawable.setBounds(0, 0, Math.round(DisplayUtil.convertDipToPixels(100)), Math.round(DisplayUtil.convertDipToPixels(100)));
+        drawable.setBounds(rect);
         drawable.draw(canvas);
     }
 
@@ -164,6 +167,52 @@ public class CanvasView extends View {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    /**
+     * Get product dimensions based on the product id.
+     * This is for POC only, the products are displayed on the device in predetermined locations.
+     *
+     * @param productId product id for which to get the rect location
+     * @return rect object with the dimensions of each of the sides
+     */
+    private Rect getProductLocationBasedOnProduct(int productId) {
+        Rect rect = new Rect();
+        switch (productId) {
+            // Gum, location: top left
+            case 1: {
+                rect.top = 0;
+                rect.left = 0;
+                rect.right = Math.round(DisplayUtil.convertDipToPixels(100));
+                rect.bottom = Math.round(DisplayUtil.convertDipToPixels(100));
+                break;
+            }
+            // Tea, location: top right
+            case 2: {
+                rect.top = 0;
+                rect.left = canvasWidth - Math.round(DisplayUtil.convertDipToPixels(100));
+                rect.right = canvasWidth;
+                rect.bottom = Math.round(DisplayUtil.convertDipToPixels(100));
+                break;
+            }
+            // Matches, location: bottom right
+            case 3: {
+                rect.top = canvasHeight - Math.round(DisplayUtil.convertDipToPixels(100));
+                rect.left = canvasWidth - Math.round(DisplayUtil.convertDipToPixels(100));
+                rect.right = canvasWidth;
+                rect.bottom = canvasHeight;
+                break;
+            }
+            // Toothpicks, location: bottom left
+            case 4: {
+                rect.top = canvasHeight - Math.round(DisplayUtil.convertDipToPixels(100));
+                rect.left = 0;
+                rect.right = Math.round(DisplayUtil.convertDipToPixels(100));
+                rect.bottom = canvasHeight;
+                break;
+            }
+        }
+        return rect;
     }
 
 }

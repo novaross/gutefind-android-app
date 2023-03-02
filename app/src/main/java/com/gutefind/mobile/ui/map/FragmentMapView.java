@@ -63,7 +63,6 @@ public class FragmentMapView extends Fragment implements FragmentMapViewInt {
         //mapPresenter.setSomeText();
         log.debug("starting delayed action");
         mapPresenter.setSomeText();
-//        canvasView.
     }
 
     @Override

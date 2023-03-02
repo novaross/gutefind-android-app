@@ -37,12 +37,12 @@ public class BeaconLocationProvider {
                 beaconLocation.setAltitude(36);
                 break;
             }
-//            case 4: {
-//                beaconLocation.setLatitude(32.083363);
-//                beaconLocation.setLongitude(34.773763);
-//                beaconLocation.setAltitude(36);
-//                break;
-//            }
+            case 4: {
+                beaconLocation.setLatitude(Constants.BEACON_BOTTOM_LEFT_LAT);
+                beaconLocation.setLongitude(Constants.BEACON_BOTTOM_LEFT_LNG);
+                beaconLocation.setAltitude(36);
+                break;
+            }
         }
 
         return new IBeaconLocationProvider<IBeacon>(iBeacon) {
