@@ -1,17 +1,22 @@
 package com.gutefind.mobile.ui.map;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.gutefind.mobile.R;
+import com.gutefind.mobile.ui.products.Product;
 import com.gutefind.mobile.util.Constants;
 import com.gutefind.mobile.util.DisplayUtil;
 import com.nexenio.bleindoorpositioning.location.Location;
@@ -38,6 +43,9 @@ public class CanvasView extends View {
     private float pixelsPerDip = DisplayUtil.convertDipToPixels(1);
     private CanvasProjection canvasProjection;
     private Location deviceLocation;
+
+
+    private Product product;
 
 
     public CanvasView(Context context) {
@@ -99,6 +107,7 @@ public class CanvasView extends View {
         drawBackground(canvas);
         // when is this triggered?
         drawDevice(canvas);
+        drawProduct(canvas);
     }
 
     private void drawDevice(Canvas canvas) {
@@ -133,6 +142,12 @@ public class CanvasView extends View {
         this.deviceLocation = location;
     }
 
+    private void drawProduct(Canvas canvas) {
+        Drawable drawable = getResources().getDrawable(product.getDrawableId(), null);
+        drawable.setBounds(0, 0, Math.round(DisplayUtil.convertDipToPixels(100)), Math.round(DisplayUtil.convertDipToPixels(100)));
+        drawable.draw(canvas);
+    }
+
     private void drawBackground(Canvas canvas) {
         canvas.drawRect(0, 0, canvasWidth, canvasHeight, backgroundPaint);
     }
@@ -145,6 +160,10 @@ public class CanvasView extends View {
         float y = canvasProjection.getYFromLocation(location);
         log.debug("getPointFromLocation: x:{}, y:{}", x, y);
         return new PointF(x, y);
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
 }

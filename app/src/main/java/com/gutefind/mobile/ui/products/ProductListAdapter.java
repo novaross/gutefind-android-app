@@ -55,6 +55,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.getAdapterPosition();
         Product product = productList.get(position);
 
         TextView productName = holder.productName;
@@ -65,10 +66,15 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         navigateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(parentFragment).navigate(R.id.action_FirstFragment_to_SecondFragment);
+                // use holder.getAdapterPosition() instead of position when not using immediately
+                int productId = productList.get(holder.getAdapterPosition()).getId();
+                // prepare navigation action with the product id
+                com.gutefind.mobile.ui.products.FragmentProductListDirections.ActionStartNavigation actionStartNavigation =
+                        FragmentProductListDirections.actionStartNavigation(productId);
+                // pass the product id with the action to the navigation fragment
+                NavHostFragment.findNavController(parentFragment).navigate(actionStartNavigation);
             }
         });
-
     }
 
     @Override

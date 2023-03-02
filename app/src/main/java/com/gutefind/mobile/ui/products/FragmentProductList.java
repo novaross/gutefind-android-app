@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gutefind.mobile.R;
 import com.gutefind.mobile.databinding.FragmentProductListBinding;
+import com.gutefind.mobile.util.Constants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,7 @@ public class FragmentProductList extends Fragment {
         binding = FragmentProductListBinding.inflate(inflater, container, false);
         RecyclerView productListView = (RecyclerView) binding.productListView;
 
-        ProductListAdapter productListAdapter = new ProductListAdapter(createProductList(), this);
+        ProductListAdapter productListAdapter = new ProductListAdapter(Constants.PRODUCT_LIST, this);
         productListView.setAdapter(productListAdapter);
         productListView.setLayoutManager(new LinearLayoutManager(container.getContext()));
         return binding.getRoot();
@@ -38,15 +39,6 @@ public class FragmentProductList extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-    }
-
-    private List<Product> createProductList() {
-        List<Product> productList = new ArrayList<>();
-        productList.add(new Product(1, "מסטיקים", R.drawable.item_gums));
-        productList.add(new Product(2, "תה", R.drawable.item_tea));
-        productList.add(new Product(3, "גפרורים", R.drawable.item_matches));
-        productList.add(new Product(4, "קיסמים", R.drawable.item_toothpics));
-        return productList;
     }
 
     @Override

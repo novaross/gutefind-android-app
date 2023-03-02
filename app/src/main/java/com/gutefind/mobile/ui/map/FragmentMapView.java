@@ -1,9 +1,6 @@
 package com.gutefind.mobile.ui.map;
 
-import android.graphics.PointF;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +8,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
-import com.gutefind.mobile.R;
 import com.gutefind.mobile.databinding.FragmentMapViewBinding;
+import com.gutefind.mobile.ui.products.Product;
+import com.gutefind.mobile.util.Constants;
 import com.nexenio.bleindoorpositioning.location.Location;
 import com.nexenio.bleindoorpositioning.location.projection.CanvasProjection;
 
@@ -48,7 +45,16 @@ public class FragmentMapView extends Fragment implements FragmentMapViewInt {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // get the product id which was passed to the fragment by the navigation action
+        int productId = FragmentMapViewArgs.fromBundle(getArguments()).getProductId();
+        mapPresenter.navigateToProduct(productId);
+    }
 
+    private void drawProduct(int productId) {
+        Product selectedProduct = Constants.PRODUCT_LIST.stream().filter(product -> productId == product.getId()).findAny().orElse(null);
+        if (null != selectedProduct) {
+
+        }
     }
 
     @Override
@@ -72,8 +78,14 @@ public class FragmentMapView extends Fragment implements FragmentMapViewInt {
     }
 
     @Override
-    public void drawDevice(Location location) {
+    public void displayDeviceDot(Location location) {
         canvasView.setDeviceLocation(location);
+        canvasView.invalidate();
+    }
+
+    @Override
+    public void displayProduct(Product product) {
+        canvasView.setProduct(product);
         canvasView.invalidate();
     }
 }

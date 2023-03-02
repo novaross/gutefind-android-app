@@ -2,9 +2,9 @@ package com.gutefind.mobile.ui.products;
 
 public class Product {
 
-    public Integer id;
-    public String name;
-    public Integer drawableId;
+    private Integer id;
+    private String name;
+    private Integer drawableId;
 
     public Product(Integer id, String name, Integer drawableId) {
         this.id = id;
@@ -34,5 +34,14 @@ public class Product {
 
     public void setDrawableId(Integer drawableId) {
         this.drawableId = drawableId;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", drawableId=" + drawableId +
+                '}';
     }
 }
