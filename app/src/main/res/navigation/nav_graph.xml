@@ -15,6 +15,7 @@
             android:id="@+id/actionStartNavigation"
             app:destination="@id/FragmentMapView" />
     </fragment>
+
     <fragment
         android:id="@+id/FragmentMapView"
         android:name="com.gutefind.mobile.ui.map.FragmentMapView"
@@ -28,4 +29,13 @@
             android:name="productId"
             app:argType="integer" />
     </fragment>
+
+    <fragment
+        android:id="@+id/FragmentSettings"
+        android:name="com.gutefind.mobile.ui.settings.FragmentSettings"
+        android:label="@string/fragment_settings_label"
+        tools:layout="@layout/fragment_settings">
+
+    </fragment>
+
 </navigation>

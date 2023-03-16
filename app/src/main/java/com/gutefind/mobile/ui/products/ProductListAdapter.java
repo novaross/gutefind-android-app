@@ -66,6 +66,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         navigateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // below is an example of a more elegant way to pass information to the target fragment
+                // https://stackoverflow.com/questions/59452243/android-navigation-component-pass-value-arguments-in-fragments
                 // use holder.getAdapterPosition() instead of position when not using immediately
                 int productId = productList.get(holder.getAdapterPosition()).getId();
                 // prepare navigation action with the product id

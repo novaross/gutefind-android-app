@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 public class FragmentMapView extends Fragment implements FragmentMapViewInt {
 
-    private Logger log = LoggerFactory.getLogger(FragmentMapView.class);
+    private final Logger log = LoggerFactory.getLogger(FragmentMapView.class);
     private CanvasView canvasView;
 
 
