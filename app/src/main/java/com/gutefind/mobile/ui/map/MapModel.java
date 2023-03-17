@@ -2,6 +2,7 @@ package com.gutefind.mobile.ui.map;
 
 import com.gutefind.mobile.location.BluetoothClient;
 import com.nexenio.bleindoorpositioning.location.Location;
+import com.tencent.mmkv.MMKV;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,7 @@ public class MapModel implements BluetoothClient.BluetoothClientCallback {
     public void onLocationChanged(Location location) {
         log.debug("onLocationUpdated in the callback: lat: {}, lng: {}", location.getLatitude(), location.getLongitude());
         if (null != mapModelCallback) {
-            mapModelCallback.onLocationChanged(getAverageLocation(location, 5));
+            mapModelCallback.onLocationChanged(getAverageLocation(location, MMKV.defaultMMKV().getInt("AVERAGE_VALUE", 1)));
         }
     }
 
@@ -74,7 +75,7 @@ public class MapModel implements BluetoothClient.BluetoothClientCallback {
         double averageLng = lng / lastLocationQueue.size();
 
         log.debug("average location, original lat: {}, original lng: {}", location.getLatitude(), location.getLongitude());
-        log.debug("average location,  average lat: {}, original lng: {}", averageLat, averageLng);
+        log.debug("average location,  average lat: {}, original lng: {}, based on {} averages", averageLat, averageLng, average);
 
         return new Location(averageLat, averageLng);
     }

@@ -61,6 +61,8 @@ public class FragmentSettings extends Fragment {
         binding.txtBeaconBottomLeftLat.setText(Double.toString(kv.decodeDouble("BEACON_BOTTOM_LEFT_LAT")));
         binding.txtBeaconBottomLeftLng.setText(Double.toString(kv.decodeDouble("BEACON_BOTTOM_LEFT_LNG")));
 
+        binding.txtAverageValue.setText(Integer.toString(kv.decodeInt("AVERAGE_VALUE", 1)));
+
     }
 
     private void saveAllFields() {
@@ -77,6 +79,8 @@ public class FragmentSettings extends Fragment {
 
         kv.encode("BEACON_BOTTOM_LEFT_LAT", getDouble(binding.txtBeaconBottomLeftLat.getText().toString()));
         kv.encode("BEACON_BOTTOM_LEFT_LNG", getDouble(binding.txtBeaconBottomLeftLng.getText().toString()));
+
+        kv.encode("AVERAGE_VALUE", Integer.parseInt(binding.txtAverageValue.getText().toString()));
     }
 
     /**
@@ -96,6 +100,8 @@ public class FragmentSettings extends Fragment {
 
         binding.txtBeaconBottomLeftLat.setText(Double.toString(Constants.BEACON_BOTTOM_LEFT_LAT));
         binding.txtBeaconBottomLeftLng.setText(Double.toString(Constants.BEACON_BOTTOM_LEFT_LNG));
+
+        binding.txtAverageValue.setText("1");
 
     }
 
