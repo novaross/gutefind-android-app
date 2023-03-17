@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,9 +26,13 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     private List<Product> productList;
     private Fragment parentFragment;
 
+    private Context context;
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView productName;
         public Button navigateButton;
+
+        public ImageView productImageView;
 
         public ViewHolder(View itemView) {
             // Stores the itemView in a public final member variable that can be used
@@ -35,12 +40,14 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             super(itemView);
             productName = (TextView) itemView.findViewById(R.id.productName);
             navigateButton = (Button) itemView.findViewById(R.id.navigateButton);
+            productImageView = (ImageView) itemView.findViewById(R.id.productImageView);
         }
     }
 
-    public ProductListAdapter(List<Product> productList, Fragment parentFragment) {
+    public ProductListAdapter(List<Product> productList, Fragment parentFragment, Context context) {
         this.productList = productList;
         this.parentFragment = parentFragment;
+        this.context = context;
     }
 
     @NonNull
@@ -57,6 +64,11 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.getAdapterPosition();
         Product product = productList.get(position);
+
+        ImageView productImageView = holder.productImageView;
+        // Drawable res = context.getResources().getDrawable(product.getDrawableId());
+        // Drawable res = ContextCompat.getDrawable(context, product.getDrawableId());
+        productImageView.setImageResource(product.getDrawableId());
 
         TextView productName = holder.productName;
         productName.setText(product.getName());

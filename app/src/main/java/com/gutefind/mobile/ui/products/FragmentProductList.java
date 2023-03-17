@@ -31,7 +31,7 @@ public class FragmentProductList extends Fragment {
         binding = FragmentProductListBinding.inflate(inflater, container, false);
         RecyclerView productListView = (RecyclerView) binding.productListView;
 
-        ProductListAdapter productListAdapter = new ProductListAdapter(Constants.PRODUCT_LIST, this);
+        ProductListAdapter productListAdapter = new ProductListAdapter(Constants.PRODUCT_LIST, this, getActivity());
         productListView.setAdapter(productListAdapter);
         productListView.setLayoutManager(new LinearLayoutManager(container.getContext()));
         return binding.getRoot();

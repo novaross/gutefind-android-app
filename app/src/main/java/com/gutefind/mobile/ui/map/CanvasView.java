@@ -11,7 +11,9 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
+import com.gutefind.mobile.R;
 import com.gutefind.mobile.ui.products.Product;
 import com.gutefind.mobile.util.DisplayUtil;
 import com.nexenio.bleindoorpositioning.location.Location;
@@ -116,7 +118,20 @@ public class CanvasView extends View {
             deviceCenter.y = 0;
         }
 
-        canvas.drawCircle(deviceCenter.x, deviceCenter.y, 50, deviceDotPaint);
+        int rectHalfSize = 80;
+        Rect rect = new Rect();
+        rect.top = Math.round(deviceCenter.y - rectHalfSize);
+        rect.left = Math.round(deviceCenter.x - rectHalfSize);
+        rect.right = Math.round(deviceCenter.x + rectHalfSize);
+        rect.bottom = Math.round(deviceCenter.y + rectHalfSize);
+
+        Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.nav_marker);
+
+        if (null != drawable) {
+            drawable.setBounds(rect);
+            drawable.draw(canvas);
+        }
+
     }
 
     private void updateEdgeLocations() {
@@ -146,10 +161,12 @@ public class CanvasView extends View {
             return;
         }
         Rect rect = getProductLocationBasedOnProduct(product.getId());
-        Drawable drawable = getResources().getDrawable(product.getDrawableId(), null);
-        //drawable.setBounds(0, 0, Math.round(DisplayUtil.convertDipToPixels(100)), Math.round(DisplayUtil.convertDipToPixels(100)));
-        drawable.setBounds(rect);
-        drawable.draw(canvas);
+        Drawable drawable = ContextCompat.getDrawable(getContext(), product.getDrawableId());
+
+        if (null != drawable) {
+            drawable.setBounds(rect);
+            drawable.draw(canvas);
+        }
     }
 
     private void drawBackground(Canvas canvas) {
