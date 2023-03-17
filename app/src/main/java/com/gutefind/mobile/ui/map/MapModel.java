@@ -1,20 +1,14 @@
 package com.gutefind.mobile.ui.map;
 
 import com.gutefind.mobile.location.BluetoothClient;
-import com.gutefind.mobile.ui.MainActivity;
-import com.nexenio.bleindoorpositioning.IndoorPositioning;
-import com.nexenio.bleindoorpositioning.ble.advertising.IndoorPositioningAdvertisingPacket;
-import com.nexenio.bleindoorpositioning.ble.beacon.BeaconManager;
-import com.nexenio.bleindoorpositioning.ble.beacon.BeaconUpdateListener;
-import com.nexenio.bleindoorpositioning.ble.beacon.filter.IBeaconFilter;
 import com.nexenio.bleindoorpositioning.location.Location;
-import com.nexenio.bleindoorpositioning.location.LocationListener;
-import com.nexenio.bleindoorpositioning.location.provider.LocationProvider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.UUID;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class MapModel implements BluetoothClient.BluetoothClientCallback {
 
@@ -22,12 +16,10 @@ public class MapModel implements BluetoothClient.BluetoothClientCallback {
         void onLocationChanged(Location location);
     }
 
-    private Logger log = LoggerFactory.getLogger(MapModel.class);
+    private final Logger log = LoggerFactory.getLogger(MapModel.class);
 
-    protected BeaconManager beaconManager = BeaconManager.getInstance();
-    protected BeaconUpdateListener beaconUpdateListener;
-    private MapModelCallback mapModelCallback;
-    protected LocationListener deviceLocationListener;
+    private final MapModelCallback mapModelCallback;
+    private Queue<Location> lastLocationQueue = new LinkedList<>();
 
     public MapModel(MapModelCallback mapModelCallback) {
         log.debug("MapModel created");
@@ -44,14 +36,48 @@ public class MapModel implements BluetoothClient.BluetoothClientCallback {
     public void onLocationChanged(Location location) {
         log.debug("onLocationUpdated in the callback: lat: {}, lng: {}", location.getLatitude(), location.getLongitude());
         if (null != mapModelCallback) {
-            mapModelCallback.onLocationChanged(location);
+            mapModelCallback.onLocationChanged(getAverageLocation(location, 5));
         }
     }
 
-//    public void shutDown() {
-//        IndoorPositioning.unregisterLocationListener(deviceLocationListener);
-//        BeaconManager.unregisterBeaconUpdateListener(beaconUpdateListener);
-//    }
+    /**
+     * Calculate an average location based on the amount of last locations
+     * <p>
+     * get all the locations from the queue
+     * calculate the average of the latitude
+     * calculate the average of the longitude
+     * set the average to the average location
+     * return to the map the average location
+     *
+     * @param location the most recent location
+     * @param average  number of last locations to take into account
+     * @return average location based on the number of last locations
+     */
+    private Location getAverageLocation(Location location, int average) {
+
+        // add > x > x > x > remove
+        lastLocationQueue.add(location);
+        if (lastLocationQueue.size() > average) {
+            lastLocationQueue.remove();
+        }
+
+        Iterator<Location> iterator = lastLocationQueue.iterator();
+        double lat = 0;
+        double lng = 0;
+        while (iterator.hasNext()) {
+            Location nextLocation = iterator.next();
+            lat += nextLocation.getLatitude();
+            lng += nextLocation.getLongitude();
+        }
+
+        double averageLat = lat / lastLocationQueue.size();
+        double averageLng = lng / lastLocationQueue.size();
+
+        log.debug("average location, original lat: {}, original lng: {}", location.getLatitude(), location.getLongitude());
+        log.debug("average location,  average lat: {}, original lng: {}", averageLat, averageLng);
+
+        return new Location(averageLat, averageLng);
+    }
 
 
 }

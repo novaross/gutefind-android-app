@@ -13,10 +13,10 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import com.gutefind.mobile.ui.products.Product;
-import com.gutefind.mobile.util.Constants;
 import com.gutefind.mobile.util.DisplayUtil;
 import com.nexenio.bleindoorpositioning.location.Location;
 import com.nexenio.bleindoorpositioning.location.projection.CanvasProjection;
+import com.tencent.mmkv.MMKV;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,15 +120,16 @@ public class CanvasView extends View {
     }
 
     private void updateEdgeLocations() {
+        MMKV kv = MMKV.defaultMMKV();
         // this is actually the location of the top left beacon
         Location topLeftLocation = new Location();
-        topLeftLocation.setLatitude(Constants.BEACON_TOP_LEFT_LAT);
-        topLeftLocation.setLongitude(Constants.BEACON_TOP_LEFT_LNG);
+        topLeftLocation.setLatitude(kv.decodeDouble("BEACON_TOP_LEFT_LAT"));
+        topLeftLocation.setLongitude(kv.decodeDouble("BEACON_TOP_LEFT_LNG"));
 
         // this is actually the location of the bottom right beacon
         Location bottomRightLocation = new Location();
-        bottomRightLocation.setLatitude(Constants.BEACON_BOTTOM_RIGHT_LAT);
-        bottomRightLocation.setLongitude(Constants.BEACON_BOTTOM_RIGHT_LNG);
+        bottomRightLocation.setLatitude(kv.decodeDouble("BEACON_BOTTOM_RIGHT_LAT"));
+        bottomRightLocation.setLongitude(kv.decodeDouble("BEACON_BOTTOM_RIGHT_LNG"));
 
         canvasProjection.setTopLeftLocation(topLeftLocation);
         canvasProjection.setBottomRightLocation(bottomRightLocation);

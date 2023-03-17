@@ -12,6 +12,7 @@ public final class Constants {
         // No need to instantiate the class, we can hide its constructor
     }
 
+    // below set of constanta are the four corners of the living room
     public static double BEACON_TOP_LEFT_LAT = 32.083400;
     public static double BEACON_TOP_LEFT_LNG = 34.773763;
 

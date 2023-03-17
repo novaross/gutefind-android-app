@@ -1,5 +1,6 @@
 package com.gutefind.mobile.ui.settings;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.gutefind.mobile.databinding.FragmentSettingsBinding;
+import com.gutefind.mobile.util.Constants;
 import com.tencent.mmkv.MMKV;
 
 import org.slf4j.Logger;
@@ -29,6 +31,12 @@ public class FragmentSettings extends Fragment {
                 saveAllFields();
             }
         });
+        binding.lblBeaconBottomLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setValuesFromConstants();
+            }
+        });
         return binding.getRoot();
     }
 
@@ -37,6 +45,7 @@ public class FragmentSettings extends Fragment {
         loadValuesFromSettings();
     }
 
+    @SuppressLint("SetTextI18n")
     private void loadValuesFromSettings() {
         MMKV kv = MMKV.defaultMMKV();
 
@@ -68,6 +77,26 @@ public class FragmentSettings extends Fragment {
 
         kv.encode("BEACON_BOTTOM_LEFT_LAT", getDouble(binding.txtBeaconBottomLeftLat.getText().toString()));
         kv.encode("BEACON_BOTTOM_LEFT_LNG", getDouble(binding.txtBeaconBottomLeftLng.getText().toString()));
+    }
+
+    /**
+     * Set preference values which correspond to the latitude and longitude of the living room
+     */
+    @SuppressLint("SetTextI18n")
+    private void setValuesFromConstants() {
+
+        binding.txtBeaconTopLeftLat.setText(Double.toString(Constants.BEACON_TOP_LEFT_LAT));
+        binding.txtBeaconTopLeftLng.setText(Double.toString(Constants.BEACON_TOP_LEFT_LNG));
+
+        binding.txtBeaconTopRightLat.setText(Double.toString(Constants.BEACON_TOP_RIGHT_LAT));
+        binding.txtBeaconTopRightLng.setText(Double.toString(Constants.BEACON_TOP_RIGHT_LNG));
+
+        binding.txtBeaconBottomRightLat.setText(Double.toString(Constants.BEACON_BOTTOM_RIGHT_LAT));
+        binding.txtBeaconBottomRightLng.setText(Double.toString(Constants.BEACON_BOTTOM_RIGHT_LNG));
+
+        binding.txtBeaconBottomLeftLat.setText(Double.toString(Constants.BEACON_BOTTOM_LEFT_LAT));
+        binding.txtBeaconBottomLeftLng.setText(Double.toString(Constants.BEACON_BOTTOM_LEFT_LNG));
+
     }
 
     private double getDouble(String text) {
