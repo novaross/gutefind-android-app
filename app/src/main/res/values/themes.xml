@@ -17,6 +17,12 @@
         <item name="android:colorBackground">@color/gutefind_background</item>
     </style>
 
+    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="colorPrimary">@color/gutefind_green</item>
+    </style>
+
     <style name="MyActionBar" parent="Widget.MaterialComponents.Light.ActionBar.Solid">
         <item name="background">@color/gutefind_background</item>
     </style>

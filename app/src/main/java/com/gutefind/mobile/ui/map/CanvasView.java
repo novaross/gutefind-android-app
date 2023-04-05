@@ -23,6 +23,8 @@ import com.tencent.mmkv.MMKV;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  * A class used to draw the beacon on a map
  * Author Ruslan Spivak, 2023-02-21
@@ -42,6 +44,7 @@ public class CanvasView extends View {
     private Location deviceLocation;
 
     private Product product;
+    private List<Product> productList;
 
 
     public CanvasView(Context context) {
@@ -95,7 +98,8 @@ public class CanvasView extends View {
         // this is triggered each time invalidate is called
         log.debug("onDraw");
         drawBackground(canvas);
-        drawProduct(canvas);
+        // drawProduct(canvas);
+        drawProductsInCorners(canvas);
         drawDevice(canvas);
     }
 
@@ -160,6 +164,25 @@ public class CanvasView extends View {
         if (null == product) {
             return;
         }
+        drawSingleProduct(canvas, product);
+    }
+
+    /**
+     * Draw all the four products int the corners of the canvas.
+     * No matter what product is selected in the product list screen
+     *
+     * @param canvas the canvas to draw on
+     */
+    private void drawProductsInCorners(Canvas canvas) {
+        if (null == productList) {
+            return;
+        }
+        for (Product product : productList) {
+            drawSingleProduct(canvas, product);
+        }
+    }
+
+    private void drawSingleProduct(Canvas canvas, Product product) {
         Rect rect = getProductLocationBasedOnProduct(product.getId());
         Drawable drawable = ContextCompat.getDrawable(getContext(), product.getDrawableId());
 
@@ -168,6 +191,7 @@ public class CanvasView extends View {
             drawable.draw(canvas);
         }
     }
+
 
     private void drawBackground(Canvas canvas) {
         canvas.drawRect(0, 0, canvasWidth, canvasHeight, backgroundPaint);
@@ -185,6 +209,10 @@ public class CanvasView extends View {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public void setProducts(List<Product> productList) {
+        this.productList = productList;
     }
 
     /**

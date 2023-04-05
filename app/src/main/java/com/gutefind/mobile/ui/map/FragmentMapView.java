@@ -18,6 +18,8 @@ import com.nexenio.bleindoorpositioning.location.projection.CanvasProjection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 public class FragmentMapView extends Fragment implements FragmentMapViewInt {
 
     private final Logger log = LoggerFactory.getLogger(FragmentMapView.class);
@@ -87,4 +89,12 @@ public class FragmentMapView extends Fragment implements FragmentMapViewInt {
         canvasView.setProduct(product);
         canvasView.invalidate();
     }
+
+    @Override
+    public void displayFourProducts(List<Product> productList) {
+        canvasView.setProducts(productList);
+        canvasView.invalidate();
+    }
+
+
 }

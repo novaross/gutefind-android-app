@@ -30,7 +30,8 @@ public class MapPresenter implements MapModel.MapModelCallback {
         Product selectedProduct = Constants.PRODUCT_LIST.stream().filter(product -> productId == product.getId()).findAny().orElse(null);
         if (null != selectedProduct) {
             log.debug("found product: {}", selectedProduct.toString());
-            mapView.displayProduct(selectedProduct);
+            // mapView.displayProduct(selectedProduct);
+            mapView.displayFourProducts(Constants.PRODUCT_LIST);
         } else {
             log.error("product with id: {}, not found in the product list", productId);
         }
